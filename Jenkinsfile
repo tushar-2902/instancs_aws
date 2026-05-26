@@ -2,22 +2,21 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = 'YOUR_ACCESS_KEY'
-        AWS_SECRET_ACCESS_KEY = 'YOUR_SECRET_KEY'
-        AWS_DEFAULT_REGION    = 'ap-south-1'
+        AWS_ACCESS_KEY_ID     = credentials('AKIASOBPW6YP3CYH2R6K')
+        AWS_SECRET_ACCESS_KEY = credentials('q8SwDBBouL6L9LKDtyGVeO+E1il+PYHsrEn53FqM')
     }
 
     stages {
 
-        stage('Terraform Init') {
+        stage('Clone') {
             steps {
-                sh 'terraform init'
+                git 'https://github.com/YOUR-USERNAME/YOUR-REPO.git'
             }
         }
 
-        stage('Terraform Validate') {
+        stage('Terraform Init') {
             steps {
-                sh 'terraform validate'
+                sh 'terraform init'
             }
         }
 

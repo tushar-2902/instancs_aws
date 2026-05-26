@@ -10,7 +10,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git 'https://github.com/YOUR-USERNAME/YOUR-REPO.git'
+                git 'https://github.com/tushar-2902/instancs_aws.git'
             }
         }
 

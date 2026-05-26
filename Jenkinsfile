@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('AKIASOBPW6YP3CYH2R6K')
-        AWS_SECRET_ACCESS_KEY = credentials('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')
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
 
     stages {
 
-        stage('Clone') {
+        stage('Check Terraform') {
             steps {
-                git 'https://github.com/tushar-2902/instancs_aws.git'
+                sh 'terraform version'
             }
         }
 

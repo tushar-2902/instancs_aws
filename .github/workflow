@@ -11,7 +11,7 @@ jobs:
 
   terraform-init:
     name: Terraform Init
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64]
 
     steps:
 
@@ -24,7 +24,7 @@ jobs:
         role-to-assume: arn:aws:iam::167603795487:role/tushar
         aws-region: ap-south-1
 
-    - name: Verify AWS Access
+    - name: Verify AWS Identity
       run: aws sts get-caller-identity
 
     - name: Setup Terraform
@@ -32,11 +32,10 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./Env
 
   terraform-validate:
     name: Terraform Validate
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64]
     needs: terraform-init
 
     steps:
@@ -55,19 +54,16 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./Env
 
     - name: Terraform Format Check
       run: terraform fmt -check
-      working-directory: ./Env
 
     - name: Terraform Validate
       run: terraform validate
-      working-directory: ./Env
 
   terraform-plan:
     name: Terraform Plan
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64]
     needs: terraform-validate
 
     steps:
@@ -86,23 +82,20 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./Env
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan
-      working-directory: ./Env
 
     - name: Upload tfplan Artifact
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
-        path: ./Env/tfplan
+        path: tfplan
 
   terraform-apply:
     name: Terraform Apply
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64]
     needs: terraform-plan
-    environment: production
 
     steps:
 
@@ -120,14 +113,11 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./Env
 
     - name: Download tfplan Artifact
       uses: actions/download-artifact@v4
       with:
         name: tfplan
-        path: ./Env
 
     - name: Terraform Apply
       run: terraform apply -auto-approve tfplan
-      working-directory: ./Env

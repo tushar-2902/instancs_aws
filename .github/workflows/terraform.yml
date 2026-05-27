@@ -1,12 +1,58 @@
-name: test
+name: AWS Terraform Deployment Pipeline
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-south-1
 
 jobs:
-  hello:
-    runs-on: self-hosted
+  terraform:
+    name: Terraform AWS Deployment
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Test Runner
-        run: echo "Runner Working Successfully"
+
+      # Step 1 - Repository Clone
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2 - AWS Authentication
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Step 3 - Terraform Install
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+
+      # Step 4 - Terraform Version Check
+      - name: Terraform Version
+        run: terraform --version
+
+      # Step 5 - Terraform Format Check
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      # Step 6 - Terraform Initialization
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 7 - Terraform Validation
+      - name: Terraform Validate
+        run: terraform validate
+
+      # Step 8 - Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      # Step 9 - Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan

@@ -4,7 +4,7 @@ resource "aws_instance" "example" {
 
 
   tags = {
-    Name = "tushar-aws"
+    Name = "tushar-aws-03"
   }
 }
 

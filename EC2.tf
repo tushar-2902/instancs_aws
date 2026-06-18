@@ -1,8 +1,8 @@
-resource "aws_vpc" "main" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
+resource "aws_instance" "example" {
+  ami           = "ami-01a00762f46d584a1"
+  instance_type = "t3.micro"
 
   tags = {
-    Name = "vishal-prithvi"
+    Name = "HelloWorld"
   }
 }
